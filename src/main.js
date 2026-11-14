@@ -2,7 +2,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import './style.css';
-// SPACE AMBIENCE MUSIC
 const spaceMusic = new Audio('/a_moment.mp3');
 spaceMusic.loop = true;
 spaceMusic.volume = 0.25;
