@@ -7,8 +7,6 @@ const spaceMusic = new Audio('/a_moment.mp3');
 spaceMusic.loop = true;
 spaceMusic.volume = 0.25;
 
-// 1. SCENE, CAMERA AND RENDERER
-
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x020609);
 
@@ -34,8 +32,6 @@ renderer.toneMappingExposure = 1.25;
 
 document.body.appendChild(renderer.domElement);
 
-// 2. CAMERA CONTROLS
-
 const controls = new OrbitControls(camera, renderer.domElement);
 
 controls.enableDamping = true;
@@ -44,9 +40,7 @@ controls.enablePan = false;
 controls.minDistance = 3.2;
 controls.maxDistance = 14;
 controls.target.set(0, 0, 0);
-
-// 4. TAU CETI PLANET
-
+//tau ceti
 const planetGroup = new THREE.Group();
 scene.add(planetGroup);
 
@@ -59,9 +53,7 @@ const planetMaterial = new THREE.MeshStandardMaterial({
 
 const planet = new THREE.Mesh(planetGeometry, planetMaterial);
 planetGroup.add(planet);
-
- // EARTH AND THE MOON
-
+// earth
 const earthGroup = new THREE.Group();
 earthGroup.position.set(-6.2, -2, -3);
 scene.add(earthGroup);
@@ -110,7 +102,6 @@ const earthAtmosphere = new THREE.Mesh(
 
 earthGroup.add(earthAtmosphere);
 
-// The Moon orbits Earth.
 const moonOrbit = new THREE.Group();
 earthGroup.add(moonOrbit);
 
@@ -139,8 +130,6 @@ for (let i = 0; i <= 100; i++) {
   );
 }
 
-/* TAU CETI F */
-
 const tauCetiFGroup = new THREE.Group();
 tauCetiFGroup.position.set(-5, 2.5, -3);
 scene.add(tauCetiFGroup);
@@ -160,9 +149,6 @@ new THREE.TextureLoader().load('/TauCeti_F.jpg', (texture) => {
   tauCetiF.material.map = texture;
   tauCetiF.material.needsUpdate = true;
 });
-
-// TAU CETI G //
-
 const tauCetiGGroup = new THREE.Group();
 tauCetiGGroup.position.set(-8, 0, -3);
 scene.add(tauCetiGGroup);
@@ -182,8 +168,6 @@ new THREE.TextureLoader().load('/TauCeti_G.jpg', (texture) => {
   tauCetiG.material.map = texture;
   tauCetiG.material.needsUpdate = true;
 });
-
-// tau ceti E //
 
 const tauCetiEGroup = new THREE.Group();
 tauCetiEGroup.position.set(3, 1.5, -3);
@@ -205,8 +189,6 @@ new THREE.TextureLoader().load('/TauCeti_E.jpg', (texture) => {
   tauCetiE.material.needsUpdate = true;
 });
 
-/* TAU CETI H */
-
 const tauCetiHGroup = new THREE.Group();
 tauCetiHGroup.position.set(6.2, -1.8, -3);
 scene.add(tauCetiHGroup);
@@ -227,14 +209,12 @@ new THREE.TextureLoader().load('/TauCeti_H.jpg', (texture) => {
   tauCetiH.material.needsUpdate = true;
 });
 
-/* PETROVA EFFECT */
+/* petrova */
 
 let petrovaActive = false;
 let petrovaProgress = 0;
 
 const petrovaButton = document.getElementById('petrova-button');
-
-// Save the original scene background
 const normalBackground = scene.background
   ? scene.background.clone()
   : new THREE.Color(0x000000);
@@ -247,7 +227,6 @@ const petrovaColor = new THREE.Color(0x6b071c);
 const normalTint = new THREE.Color(0xffffff);
 const petrovaTint = new THREE.Color(0xff7777);
 
-// Add glowing Petrova particles
 const petrovaGeometry = new THREE.BufferGeometry();
 const petrovaPositions = [];
 
@@ -302,9 +281,6 @@ const petrovaParticles = new THREE.Points(
 );
 
 scene.add(petrovaParticles);
-
-// Activate button
-
 petrovaButton.addEventListener('click', () => {
   petrovaActive = !petrovaActive;
 
@@ -331,8 +307,6 @@ function updatePetrovaEffect() {
       petrovaProgress * 0.7
     );
   }
-
-  // Tint the existing planets
   [planet, earth, erid, tauCetiF, tauCetiH, tauCetiG, tauCetiE].forEach((world) => {
     if (world && world.material && world.material.color) {
       world.material.color.copy(normalTint).lerp(
@@ -342,15 +316,12 @@ function updatePetrovaEffect() {
     }
   });
 
-  // Make the particles glow brighter
   petrovaMaterial.opacity = petrovaProgress * 0.9;
   petrovaMaterial.size = 0.10 + petrovaProgress * 0.08;
 
-  // Slowly move the particles
   petrovaParticles.rotation.y += 0.0008 * petrovaProgress;
 }
-
- // ERID
+ // erid
 const eridGroup = new THREE.Group();
 eridGroup.position.set(6.2, 2.5, -3);
 scene.add(eridGroup);
@@ -389,7 +360,6 @@ const eridAtmosphere = new THREE.Mesh(
   })
 );
 eridGroup.add(eridAtmosphere);
-// ERID RINGS
 const eridRings = new THREE.Group();
 eridRings.rotation.set(1.5, 1, 0.2);
 eridGroup.add(eridRings);
@@ -448,8 +418,6 @@ textureLoader.load(
     console.error('Could not load the Tau Ceti texture:', error);
   }
 );
-
-// A shader makes the edge glow more than the centre.
 const atmosphereGeometry = new THREE.SphereGeometry(1.75, 96, 96);
 
 const atmosphereMaterial = new THREE.ShaderMaterial({
@@ -515,9 +483,6 @@ const haloMaterial = new THREE.SpriteMaterial({
 const halo = new THREE.Sprite(haloMaterial);
 halo.scale.set(6.5, 6.5, 1);
 planetGroup.add(halo);
-
-// 6. PROCEDURAL HALO IMAGE
-
 function createGlowTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 256;
@@ -540,9 +505,6 @@ function createGlowTexture() {
 
   return new THREE.CanvasTexture(canvas);
 }
-
-// 7. LIGHTING
-
 const ambientLight = new THREE.AmbientLight(0x4b7049, 1.2);
 scene.add(ambientLight);
 
@@ -553,8 +515,6 @@ scene.add(starLight);
 const greenLight = new THREE.PointLight(0x23ff25, 3, 15);
 greenLight.position.set(-3, 1, 2);
 scene.add(greenLight);
-
-// 8. BACKGROUND STARFIELD
 
 const starCount = 5000;
 const starPositions = new Float32Array(starCount * 3);
@@ -584,15 +544,12 @@ const starMaterial = new THREE.PointsMaterial({
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
-// 10. EXPLORATION INSTRUCTIONS
-
 const instructions = document.createElement('div');
 instructions.id = 'instructions';
 instructions.textContent = 'DRAG TO EXPLORE  •  SCROLL TO ZOOM';
 
 document.body.appendChild(instructions);
 
-// Zoom buttons
 const zoomControls = document.createElement('div');
 zoomControls.id = 'zoom-controls';
 
@@ -613,8 +570,6 @@ document.getElementById('zoom-out').addEventListener('click', () => {
   controls.update();
 });
 
-// 11. RESPONSIVE RESIZE
-
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -622,13 +577,10 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// 12. ANIMATION LOOP
-
 const clock = new THREE.Clock();
 
 const planetHud = document.createElement('div');
 planetHud.id = 'planet-hud';
-
 
 planetHud.innerHTML = `
   <div class="hud-title" id="hud-name">TAU CETI</div>
@@ -644,9 +596,7 @@ planetHud.innerHTML = `
   </div>
 `;
 
-
 document.body.appendChild(planetHud);
-
 
 const moreInfoButton = document.getElementById('hud-more-info');
 const hudDetails = document.getElementById('hud-details');
@@ -658,8 +608,6 @@ moreInfoButton.addEventListener('click', () => {
     ? 'LESS INFO −'
     : 'MORE INFO +';
 });
-
-
 const hoverablePlanets = [
   {
     mesh: planet,
@@ -719,7 +667,6 @@ const hoverablePlanets = [
   }
 ];
 
-
 const hoverRaycaster = new THREE.Raycaster();
 const hoverMouse = new THREE.Vector2(-2, -2);
 window.addEventListener('pointermove', (event) => {
@@ -729,13 +676,11 @@ window.addEventListener('pointermove', (event) => {
   hoverMouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 });
 
-
 let hoveredPlanet = null;
 let hoverStartedAt = 0;
 let hudVisible = false;
 let hudLocked = false;
 
-// Keep the HUD interactive while the mouse is over it
 planetHud.addEventListener('mouseenter', () => {
   hudLocked = true;
 });
@@ -744,14 +689,10 @@ planetHud.addEventListener('mouseleave', () => {
   hudLocked = false;
 });
 
-
-
-
-
 let hoverLostAt = 0;
 
 function updatePlanetHover() {
-  // Keep the HUD open while the mouse is over it
+
   if (planetHud.matches(':hover')) {
     hoverLostAt = 0;
     return;
@@ -770,14 +711,11 @@ function updatePlanetHover() {
       )
     : null;
 
-  // When the pointer leaves a planet, give the user time to reach the HUD
   if (!found) {
     if (hudVisible) {
       if (hoverLostAt === 0) {
         hoverLostAt = performance.now();
       }
-
-      // Hide only after 800ms away from both the planet and HUD
       if (performance.now() - hoverLostAt < 800) {
         return;
       }
@@ -790,7 +728,6 @@ function updatePlanetHover() {
     return;
   }
 
-  // Reset the hide timer when a planet is hovered
   hoverLostAt = 0;
 
   if (found !== hoveredPlanet) {
@@ -800,7 +737,6 @@ function updatePlanetHover() {
     planetHud.classList.remove('visible');
   }
 
-  // Show the HUD after hovering over a planet for one second
   if (!hudVisible && performance.now() - hoverStartedAt >= 1000) {
     document.getElementById('hud-name').textContent = hoveredPlanet.name;
     document.getElementById('hud-status').textContent = hoveredPlanet.status;
@@ -816,7 +752,6 @@ function updatePlanetHover() {
     hudVisible = true;
   }
 
-  // Position the HUD beside the planet
   const screenPosition = hoveredPlanet.mesh.getWorldPosition(
     new THREE.Vector3()
   );
@@ -841,12 +776,10 @@ earth.rotation.y = elapsed * 0.12;
 // Move the Moon around Earth.
 moonOrbit.rotation.z = elapsed * 0.25;
 
-// Slowly rotate Erid.
 erid.rotation.y = elapsed * 0.05;
 eridAtmosphere.rotation.y = elapsed * 0.08;
 eridRings.rotation.z = 0.2 + elapsed * 1;
 
-  // Slowly rotate the planet and its atmosphere.
   planet.rotation.y = elapsed * 0.055;
   atmosphere.rotation.y = elapsed * 0.055;
 
@@ -863,7 +796,6 @@ updatePetrovaEffect();
   renderer.render(scene, camera);
 }
 animate();
-// MUSIC BUTTON
 
 const musicButton = document.createElement('button');
 
