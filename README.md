@@ -18,7 +18,7 @@ This project recreates a fictional star system where users can explore planets, 
 - **Planetary Animations** — Watch planets rotate.
 - **Petrova Effect** — Activate a visual effect that transforms the space environment (similar to the movie).
 
-<img width="1915" height="965" alt="hailmary-1" src="https://github.com/user-attachments/assets/7a1d35b8-b85c-4013-a8ac-172b8e59ab9d" />
+<img width="1917" height="962" alt="hailmary-2" src="https://github.com/user-attachments/assets/a6dc4822-ad71-4a03-ad7f-fa3753a23a37" />
 
 
 - **Ambient Audio** — Toggle background music on and off.
